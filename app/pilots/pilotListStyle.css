@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+.toolbar {
+    @apply grid-cols-2
+}
+
+.custom-button {
+    @apply m-3 p-3 bg-red-900 rounded-xl hover:bg-red-950 
+}

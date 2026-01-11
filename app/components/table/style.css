@@ -1,0 +1,61 @@
+@import "tailwindcss";
+
+.wrapper {
+    @apply h-full overflow-auto overflow-y-auto;
+}
+
+.table {
+    @apply w-full border-collapse text-sm table-fixed overflow-y-auto;
+}
+
+.table-header {
+    @apply sticky top-0 bg-[#0f141b] z-10;
+}
+
+.table-header-row {
+    @apply border-b border-gray-800;
+}
+
+.table-header-cell {
+    @apply px-4 py-3 text-left font-semibold text-gray-300;
+}
+
+.table-header-cell-action {
+    @apply w-12;
+}
+
+.table-body {
+    @apply overflow-auto;
+}
+
+.table-row {
+    @apply border-b border-gray-800;
+}
+
+.table-row-even {
+    @apply bg-[#0b0f14];
+}
+
+.table-row-odd {
+    @apply bg-[#0f141b];
+}
+
+.table-row-hover {
+    @apply hover:bg-[#1f2933] transition;
+}
+
+.table-cell {
+    @apply px-4 py-3 text-gray-200;
+}
+
+.table-cell-action {
+    @apply w-12;
+}
+
+.edit-button {
+    @apply text-gray-400 hover:text-white transition;
+}
+
+.edit-icon {
+    @apply w-4 h-4;
+}
