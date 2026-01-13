@@ -1,7 +1,10 @@
-import { Link } from "react-router";
+import { Link, useParams } from "react-router";
 import { racesData } from "~/races/races";
 
 export function Welcome() {
+    const { season } = useParams<{ season: string }>();
+    const currentSeason = season || "2026";
+
     // Получаем ближайшие гонки (следующие 5)
     const today = new Date();
     const upcomingRaces = racesData
@@ -19,7 +22,7 @@ export function Welcome() {
             {/* Hero Section */}
             <div className="text-center mb-4">
                 <h1 className="text-4xl font-bold mb-2">Formula 1 Dashboard</h1>
-                <p className="text-gray-400 text-lg">Welcome to the 2026 F1 Championship</p>
+                <p className="text-gray-400 text-lg">Welcome to the {currentSeason} F1 Championship</p>
             </div>
 
             {/* Statistics Cards */}
@@ -46,7 +49,7 @@ export function Welcome() {
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-semibold">Upcoming Races</h2>
                     <Link 
-                        to="/races" 
+                        to={`/${currentSeason}/races`} 
                         className="text-sm text-gray-400 hover:text-white transition"
                     >
                         View All →
@@ -54,7 +57,7 @@ export function Welcome() {
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {upcomingRaces.map((race) => (
-                        <RaceCard key={race.id} race={race} />
+                        <RaceCard key={race.id} race={race} season={currentSeason} />
                     ))}
                 </div>
             </div>
@@ -64,7 +67,7 @@ export function Welcome() {
                 <div className="flex items-center justify-between mb-4">
                     <h2 className="text-2xl font-semibold">Championship Standings</h2>
                     <Link 
-                        to="/pilots" 
+                        to={`/${currentSeason}/pilots`} 
                         className="text-sm text-gray-400 hover:text-white transition"
                     >
                         View All →
@@ -78,6 +81,7 @@ export function Welcome() {
                         team="Red Bull Racing"
                         points={25}
                         driverId={1}
+                        season={currentSeason}
                         isChampion={true}
                     />
                     <DriverCard 
@@ -87,6 +91,7 @@ export function Welcome() {
                         team="Ferrari"
                         points={18}
                         driverId={5}
+                        season={currentSeason}
                     />
                     <DriverCard 
                         position={3}
@@ -95,6 +100,7 @@ export function Welcome() {
                         team="Mercedes"
                         points={15}
                         driverId={3}
+                        season={currentSeason}
                     />
                 </div>
             </div>
@@ -106,19 +112,19 @@ export function Welcome() {
                     <QuickLinkCard 
                         title="Races"
                         description="View all races and results"
-                        link="/races"
+                        link={`/${currentSeason}/races`}
                         icon="🏁"
                     />
                     <QuickLinkCard 
                         title="Drivers"
                         description="Browse all drivers"
-                        link="/pilots"
+                        link={`/${currentSeason}/pilots`}
                         icon="👤"
                     />
                     <QuickLinkCard 
                         title="Teams"
                         description="Explore all teams"
-                        link="/teams"
+                        link={`/${currentSeason}/teams`}
                         icon="🏎️"
                     />
                 </div>
@@ -147,7 +153,7 @@ function StatCard({
     );
 }
 
-function RaceCard({ race }: { race: typeof racesData[0] }) {
+function RaceCard({ race, season }: { race: typeof racesData[0]; season: string }) {
     const startDate = new Date(race.startDate);
     const formattedDate = startDate.toLocaleDateString('en-US', { 
         month: 'short', 
@@ -157,7 +163,7 @@ function RaceCard({ race }: { race: typeof racesData[0] }) {
 
     return (
         <Link 
-            to={`/races/${race.id}`}
+            to={`/${season}/races/${race.id}`}
             className="rounded-xl bg-[#0b0f14] p-4 border border-gray-800 hover:border-gray-700 hover:bg-[#0f141b] transition block"
         >
             <div className="font-semibold text-lg mb-2">{race.name}</div>
@@ -174,6 +180,7 @@ function DriverCard({
     team, 
     points,
     driverId,
+    season,
     isChampion = false 
 }: { 
     position: number;
@@ -182,6 +189,7 @@ function DriverCard({
     team: string;
     points: number;
     driverId: number;
+    season: string;
     isChampion?: boolean;
 }) {
     const positionColors = {
@@ -192,7 +200,7 @@ function DriverCard({
 
     return (
         <Link 
-            to={`/pilots/${driverId}`}
+            to={`/${season}/pilots/${driverId}`}
             className={`rounded-xl p-4 border-2 transition hover:scale-105 ${
                 positionColors[position as keyof typeof positionColors] || "border-gray-800"
             } ${isChampion ? "bg-[#0b0f14]" : "bg-[#0b0f14]"}`}

@@ -1,5 +1,6 @@
 import {type Column, DataTable, Action} from "~/../app/components/table/table";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
+import "./teamListStyle.css";
 
 const data: Team[] = [
     {
@@ -98,12 +99,23 @@ const columns: Column<Team>[] = [
 
 export function TeamList() {
     const navigate = useNavigate();
+    const { season } = useParams<{ season: string }>();
 
     function onClick(team: Team) {
-        navigate(`/teams/${team.id}`);
+        navigate(`/${season}/teams/${team.id}`);
+    }
+
+    function onClickNew() {
+        navigate(`/${season}/teams/0`);
     }
     
     return (
-        <DataTable<Team> data={data} columns={columns} onEdit={onClick} />
-);
+        <>
+            <div className="toolbar">
+                <button className="custom-button" onClick={onClickNew}>Create</button>
+            </div>
+            
+            <DataTable<Team> data={data} columns={columns} onEdit={onClick} />
+        </>
+    );
 }

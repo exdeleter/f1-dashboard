@@ -1,5 +1,5 @@
 import {Action, type Column, DataTable} from "~/../app/components/table/table";
-import {useNavigate} from "react-router";
+import {useNavigate, useParams} from "react-router";
 
 import "./pilotListStyle.css";
 
@@ -69,13 +69,14 @@ const pilotColumns: Column<Pilot>[] = [
 
 export function PilotList() {
     const navigate = useNavigate();
+    const { season } = useParams<{ season: string }>();
 
     function onClick(pilot: Pilot) {
-        navigate(`/pilots/${pilot.id}`);
+        navigate(`/${season}/pilots/${pilot.id}`);
     }
 
     function onClickNew() {
-        navigate(`/pilots/0`);
+        navigate(`/${season}/pilots/0`);
     }
     
     return (<>

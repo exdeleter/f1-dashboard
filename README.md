@@ -1,61 +1,87 @@
-# Welcome to React Router!
+# F1 Dashboard
 
-A modern, production-ready template for building full-stack React applications using React Router.
+Современное веб-приложение для просмотра статистики и информации о Формуле-1, построенное на React Router.
 
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/remix-run/react-router-templates/tree/main/default)
+## 🏎️ Описание
 
-## Features
+F1 Dashboard — это интерактивная панель управления, которая предоставляет информацию о:
+- **Командах** — список всех команд Формулы-1 с логотипами и годом основания
+- **Пилотах** — информация о гонщиках, их номерах и командах
+- **Гонках** — данные о гонках и результатах
 
-- 🚀 Server-side rendering
-- ⚡️ Hot Module Replacement (HMR)
-- 📦 Asset bundling and optimization
-- 🔄 Data loading and mutations
-- 🔒 TypeScript by default
-- 🎉 TailwindCSS for styling
-- 📖 [React Router docs](https://reactrouter.com/)
+## ✨ Особенности
 
-## Getting Started
+- 🚀 **Server-side rendering** — быстрая загрузка и SEO-оптимизация
+- ⚡️ **Hot Module Replacement (HMR)** — мгновенное обновление при разработке
+- 🎨 **Современный дизайн** — темная тема с красными акцентами в стиле F1
+- 📱 **Адаптивный интерфейс** — удобная навигация и отзывчивый дизайн
+- 🔄 **React Router** — современная маршрутизация с поддержкой SSR
+- 🎯 **TypeScript** — типобезопасность из коробки
+- 💅 **TailwindCSS** — утилитарные стили для быстрой разработки
 
-### Installation
+## 🛠️ Технологии
 
-Install the dependencies:
+- **React 19** — библиотека для создания пользовательских интерфейсов
+- **React Router 7** — маршрутизация и SSR
+- **TypeScript** — типизированный JavaScript
+- **TailwindCSS 4** — утилитарный CSS-фреймворк
+- **Vite** — быстрый сборщик и dev-сервер
+
+## 📦 Установка
+
+Убедитесь, что у вас установлен Node.js (версия 18 или выше).
+
+Клонируйте репозиторий и установите зависимости:
 
 ```bash
 npm install
 ```
 
-### Development
+## 🚀 Разработка
 
-Start the development server with HMR:
+Запустите dev-сервер с поддержкой HMR:
 
 ```bash
 npm run dev
 ```
 
-Your application will be available at `http://localhost:5173`.
+Приложение будет доступно по адресу `http://localhost:5173`.
 
-## Building for Production
+## 🏗️ Сборка для продакшена
 
-Create a production build:
+Создайте production-сборку:
 
 ```bash
 npm run build
 ```
 
-## Deployment
-
-### Docker Deployment
-
-To build and run using Docker:
+Запустите production-сервер:
 
 ```bash
-docker build -t my-app .
-
-# Run the container
-docker run -p 3000:3000 my-app
+npm start
 ```
 
-The containerized application can be deployed to any platform that supports Docker, including:
+## 🐳 Docker
+
+Проект включает Dockerfile для контейнеризации приложения.
+
+### Сборка образа
+
+```bash
+docker build -t f1-dashboard .
+```
+
+### Запуск контейнера
+
+```bash
+docker run -p 3000:3000 f1-dashboard
+```
+
+Приложение будет доступно по адресу `http://localhost:3000`.
+
+### Платформы для деплоя
+
+Контейнеризированное приложение можно развернуть на любой платформе, поддерживающей Docker:
 
 - AWS ECS
 - Google Cloud Run
@@ -64,24 +90,49 @@ The containerized application can be deployed to any platform that supports Dock
 - Fly.io
 - Railway
 
-### DIY Deployment
-
-If you're familiar with deploying Node applications, the built-in app server is production-ready.
-
-Make sure to deploy the output of `npm run build`
+## 📁 Структура проекта
 
 ```
+├── app/
+│   ├── components/      # Переиспользуемые компоненты
+│   │   ├── table/       # Компонент таблицы данных
+│   │   └── breadcrumbs/ # Хлебные крошки навигации
+│   ├── routes/          # Маршруты приложения
+│   ├── teams/           # Компоненты команд
+│   ├── pilots/          # Компоненты пилотов
+│   ├── races/           # Компоненты гонок
+│   ├── welcome/         # Главная страница
+│   ├── app.css          # Глобальные стили
+│   └── root.tsx         # Корневой компонент
+├── build/               # Собранное приложение
+│   ├── client/          # Статические файлы
+│   └── server/          # Серверный код
+├── public/              # Публичные файлы
 ├── package.json
-├── package-lock.json (or pnpm-lock.yaml, or bun.lockb)
-├── build/
-│   ├── client/    # Static assets
-│   └── server/    # Server-side code
+├── tsconfig.json
+├── vite.config.ts
+└── react-router.config.ts
 ```
 
-## Styling
+## 🎨 Стилизация
 
-This template comes with [Tailwind CSS](https://tailwindcss.com/) already configured for a simple default starting experience. You can use whatever CSS framework you prefer.
+Проект использует TailwindCSS с кастомной темной темой:
+- Основной фон: `#0b0f14`, `#0f141b`
+- Акценты: красные оттенки (`bg-red-900`, `bg-red-950`)
+- Текст: белый и серые оттенки
+- Скругления: `rounded-xl`, `rounded-16px`
+
+## 📝 Скрипты
+
+- `npm run dev` — запуск dev-сервера
+- `npm run build` — сборка для продакшена
+- `npm start` — запуск production-сервера
+- `npm run typecheck` — проверка типов TypeScript
+
+## 📄 Лицензия
+
+Этот проект создан для образовательных целей.
 
 ---
 
-Built with ❤️ using React Router.
+Создано с ❤️ используя React Router и Formula 1.

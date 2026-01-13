@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+.toolbar {
+    @apply mb-4;
+}
+
+.custom-button {
+    @apply m-3 p-3 bg-red-900 rounded-xl hover:bg-red-950 text-white font-medium transition-colors duration-200;
+}
+

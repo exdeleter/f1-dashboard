@@ -1,5 +1,5 @@
 import { type Column, DataTable, Action } from "~/components/table/table";
-import { useNavigate } from "react-router";
+import { useNavigate, useParams } from "react-router";
 
 export type Race = {
     id: number;
@@ -52,9 +52,10 @@ const racesColumns : Column<Race>[] = [
 
 export function RaceList() {
     const navigate = useNavigate();
+    const { season } = useParams<{ season: string }>();
 
     function onClick(race: Race) {
-        navigate(`/races/${race.id}`);
+        navigate(`/${season}/races/${race.id}`);
     }
     
     return (

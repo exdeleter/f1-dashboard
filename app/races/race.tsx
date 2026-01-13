@@ -69,7 +69,7 @@ const mockRace: Race = {
 };
 
 export function RaceView() {
-    const { id } = useParams<{ id: string }>();
+    const { id, season } = useParams<{ id: string; season: string }>();
 
     // позже здесь будет загрузка по id
     const race = mockRace;
@@ -121,7 +121,7 @@ export function RaceView() {
                                 P{result.position}
                             </div>
                             <Link
-                                to={`/pilots/${result.driver.id}`}
+                                to={`/${season}/pilots/${result.driver.id}`}
                                 className="text-lg font-medium hover:underline hover:text-white transition block"
                             >
                                 {result.driver.name}
@@ -166,6 +166,7 @@ function StatCard({
 }
 
 function RaceResultsTable({ results }: { results: RaceResult[] }) {
+    const { season } = useParams<{ season: string }>();
     const columns: Column<RaceResult>[] = [
         {
             name: "Position",
@@ -181,7 +182,7 @@ function RaceResultsTable({ results }: { results: RaceResult[] }) {
                 const driver = value as RaceResult["driver"];
                 return (
                     <Link
-                        to={`/pilots/${driver.id}`}
+                        to={`/${season}/pilots/${driver.id}`}
                         className="hover:underline hover:text-white transition"
                     >
                         {driver.name} #{driver.number}

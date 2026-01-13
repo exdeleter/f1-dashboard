@@ -37,7 +37,7 @@ const mockTeam: Team = {
 };
 
 export function TeamView() {
-    const { id } = useParams<{ id: string }>();
+    const { id, season } = useParams<{ id: string; season: string }>();
 
     // позже здесь будет загрузка по id
     const team = mockTeam;
@@ -81,7 +81,7 @@ export function TeamView() {
                             className="rounded-xl bg-[#0b0f14] p-4 border border-gray-800"
                         >
                             <Link
-                                to={`/pilots/${driver.id}`}
+                                to={`/${season}/pilots/${driver.id}`}
                                 className="text-lg font-medium hover:underline hover:text-white transition"
                             >
                                 {driver.name}

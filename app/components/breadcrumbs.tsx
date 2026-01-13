@@ -19,11 +19,18 @@ export function Breadcrumbs() {
 
     // Добавляем остальные сегменты
     let currentPath = "";
-    pathSegments.forEach((segment) => {
+    pathSegments.forEach((segment, index) => {
         currentPath += `/${segment}`;
         
-        // Для числовых ID просто выводим ID
-        if (/^\d+$/.test(segment)) {
+        // Первый сегмент - это сезон (4 цифры)
+        if (index === 0 && /^\d{4}$/.test(segment)) {
+            breadcrumbs.push({
+                label: `Season ${segment}`,
+                path: currentPath,
+            });
+        }
+        // Для числовых ID (не сезон) просто выводим ID
+        else if (/^\d+$/.test(segment)) {
             breadcrumbs.push({
                 label: segment,
                 path: currentPath,

@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  f1-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: f1-app
+    container_name: f1-app
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOST=0.0.0.0
+    restart: unless-stopped
+
