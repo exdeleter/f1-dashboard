@@ -18,5 +18,10 @@ export default [
                 route(":id", "routes/races.$id.tsx"),
             ]),
         ]),
+        route("reports", "routes/reports.tsx", [
+            index("routes/reports.index.tsx"),
+            route("new", "routes/reports.new.tsx"),
+            route(":id", "routes/reports.$id.tsx"),
+        ]),
     ])
 ] satisfies RouteConfig;

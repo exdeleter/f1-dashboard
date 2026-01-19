@@ -1,5 +1,4 @@
 import { Outlet, NavLink, Link, useParams, useLocation, useNavigate } from "react-router";
-import F1 from "~/routes/F1.svg";
 import { Breadcrumbs } from "~/components/breadcrumbs";
 import { getAvailableSeasons, getDefaultSeason } from "~/utils/useSeason";
 
@@ -50,7 +49,7 @@ export default function Layout() {
                 {/* Header */}
                 <div className="sidebar-header">
                     <Link to={`/${currentSeason}`}>
-                        <img src={F1} alt="F1" className="w-24 mx-auto cursor-pointer hover:opacity-80 transition" />
+                        <img src="/F1.svg" alt="F1" className="w-24 mx-auto cursor-pointer hover:opacity-80 transition" />
                     </Link>
                 </div>
 
@@ -62,6 +61,7 @@ export default function Layout() {
                     <NavLink to={`/${currentSeason}/teams`}>Teams</NavLink>
                     <NavLink to={`/${currentSeason}/pilots`}>Pilots</NavLink>
                     <NavLink to={`/${currentSeason}/races`}>Races</NavLink>
+                    <NavLink to="/reports">Reports</NavLink>
                 </nav>
             </aside>
 
