@@ -1,219 +1,213 @@
-import { useParams, Link } from "react-router";
-import { type Column, DataTable } from "~/components/table/table";
+import { useState } from 'react';
+import { type Column, DataTable, Action } from "~/components/table/table";
 
-type RaceResult = {
-    id: number;
-    position: number;
-    driver: {
-        id: number;
-        name: string;
-        number: number;
-    };
-    team: string;
-    time: string;
-    points: number;
-};
 
-type Race = {
-    id: number;
-    name: string;
-    venue: string;
-    circuit: string;
-    startDate: string;
-    endDate: string;
-    raceDate: string;
-    laps: number;
-    winner: {
-        id: number;
-        name: string;
-        number: number;
-    };
-    fastestLap: {
-        driver: string;
-        time: string;
-    };
-    results: RaceResult[];
-};
+type SessionType =
+    | 'practice-1'
+    | 'practice-2'
+    | 'practice-3'
+    | 'qualifying'
+    | 'starting-grid'
+    | 'pit-stops'
+    | 'fastest-laps'
+    | 'race-result';
 
-// mock data
-const mockRace: Race = {
-    id: 1,
-    name: "Australian Grand Prix",
-    venue: "Melbourne, Albert Park",
-    circuit: "Albert Park Circuit",
-    startDate: "2026-03-06",
-    endDate: "2026-03-08",
-    raceDate: "2026-03-08",
-    laps: 58,
-    winner: {
-        id: 1,
-        name: "Max Verstappen",
-        number: 1,
-    },
-    fastestLap: {
-        driver: "Charles Leclerc",
-        time: "1:20.915",
-    },
-    results: [
-        { id: 1, position: 1, driver: { id: 1, name: "Max Verstappen", number: 1 }, team: "Red Bull Racing", time: "1:32:15.123", points: 25 },
-        { id: 2, position: 2, driver: { id: 16, name: "Charles Leclerc", number: 16 }, team: "Scuderia Ferrari", time: "+2.456", points: 18 },
-        { id: 3, position: 3, driver: { id: 44, name: "Lewis Hamilton", number: 44 }, team: "Mercedes", time: "+5.789", points: 15 },
-        { id: 4, position: 4, driver: { id: 55, name: "Carlos Sainz", number: 55 }, team: "Scuderia Ferrari", time: "+8.234", points: 12 },
-        { id: 5, position: 5, driver: { id: 11, name: "Sergio Pérez", number: 11 }, team: "Red Bull Racing", time: "+12.567", points: 10 },
-        { id: 6, position: 6, driver: { id: 4, name: "Lando Norris", number: 4 }, team: "McLaren", time: "+15.890", points: 8 },
-        { id: 7, position: 7, driver: { id: 63, name: "George Russell", number: 63 }, team: "Mercedes", time: "+18.123", points: 6 },
-        { id: 8, position: 8, driver: { id: 81, name: "Oscar Piastri", number: 81 }, team: "McLaren", time: "+21.456", points: 4 },
-        { id: 9, position: 9, driver: { id: 14, name: "Fernando Alonso", number: 14 }, team: "Aston Martin", time: "+24.789", points: 2 },
-        { id: 10, position: 10, driver: { id: 18, name: "Lance Stroll", number: 18 }, team: "Aston Martin", time: "+27.123", points: 1 },
-    ],
-};
+const sessions: { value: SessionType; label: string }[] = [
+    { value: 'practice-1', label: 'Practice 1' },
+    { value: 'practice-2', label: 'Practice 2' },
+    { value: 'practice-3', label: 'Practice 3' },
+    { value: 'qualifying', label: 'Qualifying' },
+    { value: 'starting-grid', label: 'Starting Grid' },
+    { value: 'pit-stops', label: 'Pit Stop Summary' },
+    { value: 'fastest-laps', label: 'Fastest Laps' },
+    { value: 'race-result', label: 'Race Result' },
+];
 
 export function RaceView() {
-    const { id, season } = useParams<{ id: string; season: string }>();
-
-    // позже здесь будет загрузка по id
-    const race = mockRace;
+    const [selectedSession, setSelectedSession] =
+        useState<SessionType>('race-result');
 
     return (
-        <div className="flex flex-col gap-8 overflow-y-auto">
-            {/* Header */}
-            <div>
-                <h1 className="text-3xl font-bold mb-2">{race.name}</h1>
-                <div className="text-gray-400">{race.venue}</div>
-                <div className="text-gray-400">Circuit: {race.circuit}</div>
+        <div className="flex flex-col gap-8">
+            {/* ===== Race info ===== */}
+            <RaceInfo />
+
+            {/* ===== Session selector ===== */}
+            <SessionSelector
+                value={selectedSession}
+                onChange={setSelectedSession}
+            />
+
+            {/* ===== Session content ===== */}
+            <SessionResults session={selectedSession} />
+        </div>
+    );
+}
+
+function RaceInfo() {
+    return (
+        <div className="rounded-xl bg-[#0b0f14] p-6 border border-gray-800">
+            <h1 className="text-2xl font-bold mb-2">
+                Formula 1 Las Vegas Grand Prix 2025
+            </h1>
+
+            <div className="grid grid-cols-2 gap-4 text-gray-300 text-sm">
+                <div><span className="text-gray-400">Circuit:</span> Las Vegas Street Circuit</div>
+                <div><span className="text-gray-400">Country:</span> USA</div>
+                <div><span className="text-gray-400">Date:</span> 22–24 November 2025</div>
+                <div><span className="text-gray-400">Distance:</span> 309.958 km</div>
+            </div>
+        </div>
+    );
+}
+
+type SessionSelectorProps = {
+    value: string;
+    onChange: (value: any) => void;
+};
+
+function SessionSelector({ value, onChange }: SessionSelectorProps) {
+    return (
+        <div className="flex items-center gap-4">
+      <span className="text-gray-400 text-sm">
+        Show results for:
+      </span>
+
+            <select
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                className="
+          bg-[#0b0f14]
+          border border-gray-800
+          rounded-lg
+          px-4 py-2
+          text-white
+          focus:outline-none
+          focus:border-red-600
+        "
+            >
+                {sessions.map((s) => (
+                    <option key={s.value} value={s.value}>
+                        {s.label}
+                    </option>
+                ))}
+            </select>
+        </div>
+    );
+}
+
+function SessionResults({ session }: { session: string }) {
+    const data = mockResults[session] ?? [];
+
+    return (
+        <div className="rounded-xl bg-[#0b0f14] p-6 border border-gray-800">
+            <h2 className="text-xl font-semibold mb-4">
+                {session.replace("-", " ").toUpperCase()}
+            </h2>
+
+            {data.length === 0 ? (
                 <div className="text-gray-400">
-                    Race Date: {race.raceDate}
+                    No results available for this session
                 </div>
-            </div>
-
-            {/* Stats */}
-            <div className="grid grid-cols-4 gap-4">
-                <StatCard label="Laps" value={race.laps} />
-                <StatCard 
-                    label="Winner" 
-                    value={race.winner.name}
-                    isText={true}
+            ) : (
+                <DataTable
+                    data={data}
+                    columns={raceResultColumns}
                 />
-                <StatCard 
-                    label="Fastest Lap" 
-                    value={race.fastestLap.time}
-                    isText={true}
-                />
-                <StatCard 
-                    label="Fastest Lap Driver" 
-                    value={race.fastestLap.driver}
-                    isText={true}
-                />
-            </div>
-
-            {/* Podium */}
-            <div>
-                <h2 className="text-xl font-semibold mb-4">Podium</h2>
-                <div className="grid grid-cols-3 gap-4">
-                    {race.results.slice(0, 3).map((result, index) => (
-                        <div
-                            key={result.position}
-                            className={`rounded-xl bg-[#0b0f14] p-4 border border-gray-800 ${
-                                index === 0 ? "border-yellow-500" : ""
-                            }`}
-                        >
-                            <div className="text-2xl font-bold mb-2">
-                                P{result.position}
-                            </div>
-                            <Link
-                                to={`/${season}/pilots/${result.driver.id}`}
-                                className="text-lg font-medium hover:underline hover:text-white transition block"
-                            >
-                                {result.driver.name}
-                            </Link>
-                            <div className="text-gray-400">#{result.driver.number}</div>
-                            <div className="text-gray-400 text-sm mt-1">{result.team}</div>
-                            <div className="text-gray-400 text-sm">{result.time}</div>
-                            <div className="text-yellow-400 font-semibold mt-2">
-                                {result.points} pts
-                            </div>
-                        </div>
-                    ))}
-                </div>
-            </div>
-
-            {/* Results */}
-            <div>
-                <h2 className="text-xl font-semibold mb-4">Race Results</h2>
-                <RaceResultsTable results={race.results} />
-            </div>
+            )}
         </div>
     );
 }
 
-function StatCard({ 
-    label, 
-    value, 
-    isText = false 
-}: { 
-    label: string; 
-    value: number | string;
-    isText?: boolean;
-}) {
-    return (
-        <div className="rounded-xl bg-[#0b0f14] p-4 border border-gray-800">
-            <div className="text-gray-400 text-sm">{label}</div>
-            <div className={`${isText ? "text-lg" : "text-2xl"} font-bold mt-1`}>
-                {value}
-            </div>
-        </div>
-    );
-}
+type RaceResultRow = {
+    id: number;
+    position: number;
+    driver: string;
+    team: string;
+    time: string;
+    laps: number;
+    points?: number;
+};
 
-function RaceResultsTable({ results }: { results: RaceResult[] }) {
-    const { season } = useParams<{ season: string }>();
-    const columns: Column<RaceResult>[] = [
-        {
-            name: "Position",
-            path: "position",
-            render: (value) => (
-                <span className="font-bold">{value as number}</span>
-            ),
-        },
-        {
-            name: "Driver",
-            path: "driver",
-            render: (value) => {
-                const driver = value as RaceResult["driver"];
-                return (
-                    <Link
-                        to={`/${season}/pilots/${driver.id}`}
-                        className="hover:underline hover:text-white transition"
-                    >
-                        {driver.name} #{driver.number}
-                    </Link>
-                );
-            },
-        },
-        {
-            name: "Team",
-            path: "team",
-            render: (value) => (
-                <span className="text-gray-400">{value as string}</span>
-            ),
-        },
-        {
-            name: "Time",
-            path: "time",
-            render: (value) => (
-                <span className="text-gray-400">{value as string}</span>
-            ),
-        },
-        {
-            name: "Points",
-            path: "points",
-            render: (value) => (
-                <span className="text-yellow-400 font-semibold">
-                    {value as number}
-                </span>
-            ),
-        },
-    ];
+const raceResultColumns: Column<RaceResultRow>[] = [
+    { name: "Pos", path: "position" },
+    { name: "Driver", path: "driver" },
+    { name: "Team", path: "team" },
+    { name: "Time", path: "time" },
+    { name: "Laps", path: "laps" },
+    {
+        name: "Pts",
+        path: "points",
+        render: (value) => value ?? "—",
+    },
+];
 
-    return <DataTable<RaceResult> data={results} columns={columns} />;
-}
+const mockResults: Record<string, RaceResultRow[]> = {
+    "practice-1": [
+        {
+            id: 1,
+            position: 1,
+            driver: "Max Verstappen",
+            team: "Red Bull Racing",
+            time: "1:34.876",
+            laps: 28,
+        },
+        {
+            id: 2,
+            position: 2,
+            driver: "Charles Leclerc",
+            team: "Ferrari",
+            time: "+0.214",
+            laps: 30,
+        },
+    ],
+
+    qualifying: [
+        {
+            id: 3,
+            position: 1,
+            driver: "Carlos Sainz",
+            team: "Ferrari",
+            time: "1:33.921",
+            laps: 12,
+        },
+        {
+            id: 4,
+            position: 2,
+            driver: "George Russell",
+            team: "Mercedes",
+            time: "+0.082",
+            laps: 11,
+        },
+    ],
+
+    "race-result": [
+        {
+            id: 5,
+            position: 1,
+            driver: "Max Verstappen",
+            team: "Red Bull Racing",
+            time: "1:29:14.321",
+            laps: 50,
+            points: 25,
+        },
+        {
+            id: 6,
+            position: 2,
+            driver: "Lando Norris",
+            team: "McLaren",
+            time: "+3.218",
+            laps: 50,
+            points: 18,
+        },
+        {
+            id: 7,
+            position: 3,
+            driver: "Lewis Hamilton",
+            team: "Mercedes",
+            time: "+7.904",
+            laps: 50,
+            points: 15,
+        },
+    ],
+};

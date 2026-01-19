@@ -1,0 +1,66 @@
+@import "tailwindcss";
+
+.pilot-form {
+    @apply flex flex-col gap-6;
+}
+
+.pilot-form-title {
+    @apply text-2xl font-bold text-white;
+}
+
+.pilot-form-card {
+    @apply rounded-xl bg-[#0b0f14] p-6 border border-gray-800 flex flex-col gap-4;
+}
+
+.pilot-form-grid {
+    @apply grid grid-cols-2 gap-4;
+}
+
+.pilot-input {
+    @apply w-full rounded-lg bg-[#0f141b] border border-gray-700
+    px-4 py-2 text-sm text-white
+    placeholder-gray-500
+    focus:outline-none focus:ring-2 focus:ring-red-600 focus:border-red-600
+    transition;
+}
+
+.pilot-input-full {
+    @apply col-span-2;
+}
+
+.pilot-button {
+    @apply mt-4 inline-flex items-center justify-center
+    rounded-xl bg-red-700 px-5 py-3
+    text-sm font-medium text-white
+    hover:bg-red-800 transition-colors;
+}
+
+.pilot-upload {
+    @apply flex flex-col gap-3 col-span-2;
+}
+
+.pilot-upload-preview {
+    @apply w-32 h-32 rounded-xl bg-[#0f141b]
+    border border-gray-700
+    flex items-center justify-center
+    overflow-hidden;
+}
+
+.pilot-upload-preview img {
+    @apply w-full h-full object-cover;
+}
+
+.pilot-upload-button {
+    @apply inline-flex items-center justify-center
+    px-4 py-2 rounded-lg
+    bg-[#1f2933] border border-gray-700
+    text-sm text-gray-200
+    hover:bg-[#2a3441] transition cursor-pointer;
+}
+
+.pilot-button {
+    @apply mt-4 inline-flex items-center justify-center
+    rounded-xl bg-red-700 px-5 py-3
+    text-sm font-medium text-white
+    hover:bg-red-800 transition-colors;
+}
