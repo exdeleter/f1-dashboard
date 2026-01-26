@@ -37,4 +37,3 @@ export function getAvailableSeasons(): number[] {
 export function getDefaultSeason(): number {
   return DEFAULT_SEASON;
 }
-
