@@ -59,3 +59,7 @@
 .edit-icon {
     @apply w-4 h-4;
 }
+
+.skeleton-cell {
+    @apply h-4 w-full rounded bg-gray-700/60 animate-pulse;
+}

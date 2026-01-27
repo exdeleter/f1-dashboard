@@ -1,9 +1,9 @@
 import { type Column, DataTable, Action } from "~/../app/components/table/table";
 import { useNavigate, useParams } from "react-router";
 import "./teamListStyle.css";
-import { useTeams } from "~/hooks/useTeams.ts";
+import { useTeams } from "~/hooks/useTeams";
 
-// Определение интерфейса Team (ваш текущий интерфейс не соответствует DTO с бэкенда)
+// Определение интерфейса Team
 export interface Team {
     id: string;
     name: string;
@@ -11,22 +11,6 @@ export interface Team {
     engine: string;
     colorHex: string;
     seasonId: string;
-}
-
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-
-export async function fetchTeams(season?: string): Promise<Team[]> {
-    const url = season
-        ? `${API_BASE_URL}/team?season=${season}`
-        : `${API_BASE_URL}/team`;
-
-    const res = await fetch(url);
-
-    if (!res.ok) {
-        throw new Error(`HTTP ${res.status}`);
-    }
-
-    return res.json();
 }
 
 const columns: Column<Team>[] = [
@@ -83,10 +67,6 @@ export function TeamList() {
         navigate(`/${season}/teams/new`);
     }
 
-    if (loading) {
-        return <div className="loading">Loading teams...</div>;
-    }
-
     if (error) {
         return <div className="error">Error: {error}</div>;
     }
@@ -107,7 +87,7 @@ export function TeamList() {
                 columns={columns}
                 onEdit={onClick}
                 // onDelete={handleDelete}
-                // loading={loading} // TODO add skeleton animation
+                loading={loading}
             />
         </>
     );

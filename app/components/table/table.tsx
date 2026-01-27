@@ -18,6 +18,7 @@ type DataTableProps<T> = {
     data: T[];
     columns: Column<T>[];
     onEdit?: (row: T) => void;
+    loading?: boolean;
 };
 
 function EditIcon() {
@@ -41,8 +42,11 @@ function EditIcon() {
 export function DataTable<T extends { id: number | string }>({
                                                                  data,
                                                                  columns,
-                                                                 onEdit
+                                                                 onEdit,
+                                                                 loading = false,
                                                              }: DataTableProps<T>) {
+    const skeletonRowsCount = 5;
+
     return (
         <div className="wrapper">
             <table className="table">
@@ -53,7 +57,9 @@ export function DataTable<T extends { id: number | string }>({
                         <th
                             key={col.name}
                             className={`table-header-cell ${
-                                col.action === Action.Edit ? "table-header-cell-action" : ""
+                                col.action === Action.Edit
+                                    ? "table-header-cell-action"
+                                    : ""
                             }`}
                         >
                             {col.action === Action.Edit ? "" : col.name}
@@ -64,39 +70,66 @@ export function DataTable<T extends { id: number | string }>({
 
                 {/* ===== BODY ===== */}
                 <tbody className="table-body">
-                {data.map((row, rowIndex) => (
-                    <tr
-                        key={row.id}
-                        className={`table-row ${
-                            rowIndex % 2 === 0 ? "table-row-even" : "table-row-odd"
-                        } table-row-hover`}
-                    >
-                        {columns.map((col) => (
-                            <td
-                                key={col.name}
-                                className={`table-cell ${
-                                    col.action === Action.Edit ? "table-cell-action" : ""
-                                }`}
-                            >
-                                {col.action === Action.Edit ? (
-                                    <button
-                                        className="edit-button"
-                                        title="Edit"
-                                        onClick={() => onEdit?.(row)}
-                                    >
-                                        <EditIcon />
-                                    </button>
-                                ) : col.render ? (
-                                    col.render(row[col.path], row)
-                                ) : (
-                                    String(row[col.path])
-                                )}
-                            </td>
-                        ))}
-                    </tr>
-                ))}
+                {loading
+                    ? Array.from({ length: skeletonRowsCount }).map((_, i) => (
+                        <SkeletonRow
+                            key={i}
+                            columns={columns.length}
+                        />
+                    ))
+                    : data.map((row, rowIndex) => (
+                        <tr
+                            key={row.id}
+                            className={`table-row ${
+                                rowIndex % 2 === 0
+                                    ? "table-row-even"
+                                    : "table-row-odd"
+                            } table-row-hover`}
+                        >
+                            {columns.map((col) => (
+                                <td
+                                    key={col.name}
+                                    className={`table-cell ${
+                                        col.action === Action.Edit
+                                            ? "table-cell-action"
+                                            : ""
+                                    }`}
+                                >
+                                    {col.action === Action.Edit ? (
+                                        <button
+                                            className="edit-button"
+                                            title="Edit"
+                                            onClick={() => onEdit?.(row)}
+                                        >
+                                            <EditIcon />
+                                        </button>
+                                    ) : col.render ? (
+                                        col.render(row[col.path], row)
+                                    ) : (
+                                        String(row[col.path])
+                                    )}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
                 </tbody>
             </table>
         </div>
+    );
+}
+
+function SkeletonCell() {
+    return <div className="skeleton-cell" />;
+}
+
+function SkeletonRow({ columns }: { columns: number }) {
+    return (
+        <tr className="table-row">
+            {Array.from({ length: columns }).map((_, i) => (
+                <td key={i} className="table-cell">
+                    <SkeletonCell />
+                </td>
+            ))}
+        </tr>
     );
 }
